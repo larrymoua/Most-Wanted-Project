@@ -1,18 +1,21 @@
 /*
 Build all of your functions for displaying and gathering information below (GUI).
 */
-
+// let x =data[0];
+// let test = "firstName";
+// console.log(x[test]);
 // app is the function called to start the entire application
 function app(people){
   var searchType = promptFor("Do you know the name of the person you are looking for? Enter 'yes' or 'no'", yesNo).toLowerCase();
   switch(searchType){
     case 'yes':
-      let filteredPeople = searchByName(people);// TODO: search by name
+      let filteredPeople = searchByName(people);// search by name
        mainMenu(filteredPeople[0], people);
       break;
     case 'no':
-      checkTraits(people);
-     // TODO: search by traits
+      let filterTraits = checkTraits(people);
+      mainMenu(filterTraits[0],people);
+     // search by traits
       break;
     default:
       alert("Invalid input. Please try again!");
@@ -20,14 +23,30 @@ function app(people){
     break;
   }
 }
+function searchByName(people){
+
+  var firstName = promptFor("What is the person's first name?", chars);
+  var lastName = promptFor("What is the person's last name?", chars);
+  let filteredPeople = people.filter(function(el) {
+    if(el.firstName.toLowerCase() === firstName && el.lastName.toLowerCase() === lastName) {
+      return el;
+    }
+  });
+    return filteredPeople;
+  // 
+
+}
 function checkTraits(people){
-  var traitAnswer =promptfor("")
+  var traitKnows = prompt("Enter trait you know of this person(id , firstName, ")
+  var traitInformationEntered = prompt ("Please enter this person's " + traitKnows + ".");
   let filterTraits = people.filter(function(el){
-    if(el.id === traitAnswer || el.parents === traitAnswer || el.lastName === traitAnswer ){
+    if(el[traitKnows].toLowerCase() === traitInformationEntered.toLowerCase()){
+
       return el;
 }
+   
 });
-
+   return filterTraits;
 }
 // Menu function to call once you find who you are looking for
 function mainMenu(person, people){
@@ -43,7 +62,8 @@ function mainMenu(person, people){
 
   switch(displayOption){
     case "info":
-      // TODO: get person's info
+      console.log(person);
+
       break;
     case "family":
       // TODO: get person's family
@@ -59,19 +79,8 @@ function mainMenu(person, people){
     default:
       return mainMenu(person, people); // ask again
   }
-}
 
-function searchByName(people){
-
-  var firstName = promptFor("What is the person's first name?", chars);
-  var lastName = promptFor("What is the person's last name?", chars);
-  let filteredPeople = people.filter(function(el) {
-    if(el.firstName === firstName && el.lastName === lastName) {
-      return el;
-    }
-  });
-    return filteredPeople;
-  // TODO: What to do with filteredPeople?
+  return mainMenu(person, people);
 
 }
 

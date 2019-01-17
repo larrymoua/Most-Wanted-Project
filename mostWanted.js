@@ -7,12 +7,11 @@ function app(people){
   var searchType = promptFor("Do you know the name of the person you are looking for? Enter 'yes' or 'no'", yesNo).toLowerCase();
   switch(searchType){
     case 'yes':
-      let filteredPeople = searchByName(people);// TODO: search by name
-       mainMenu(filteredPeople[0], people);
+           let filteredPeople = searchByName(people);   // TODO: search by name
+
       break;
     case 'no':
-      checkTraits(people);
-     // TODO: search by traits
+      checktraits(people);    // TODO: search by traits
       break;
     default:
       alert("Invalid input. Please try again!");
@@ -20,15 +19,7 @@ function app(people){
     break;
   }
 }
-function checkTraits(people){
-  var traitAnswer =promptfor("")
-  let filterTraits = people.filter(function(el){
-    if(el.id === traitAnswer || el.parents === traitAnswer || el.lastName === traitAnswer ){
-      return el;
-}
-});
 
-}
 // Menu function to call once you find who you are looking for
 function mainMenu(person, people){
 
@@ -62,15 +53,15 @@ function mainMenu(person, people){
 }
 
 function searchByName(people){
-
   var firstName = promptFor("What is the person's first name?", chars);
   var lastName = promptFor("What is the person's last name?", chars);
+
   let filteredPeople = people.filter(function(el) {
     if(el.firstName === firstName && el.lastName === lastName) {
       return el;
     }
   });
-    return filteredPeople;
+
   // TODO: What to do with filteredPeople?
 
 }
@@ -87,6 +78,11 @@ function displayPerson(person){
   // height, weight, age, name, occupation, eye color.
   var personInfo = "First Name: " + person.firstName + "\n";
   personInfo += "Last Name: " + person.lastName + "\n";
+  personInfo += "Age: " + person.age + "\n";
+  personInfo += "Height: " + person.height + "\n";
+  personInfo += "Weight: " + person.weight + "\n";
+  personInfo += "Eye Color: " + person.eyecolor + "\n";
+  personInfo += "occupation: " + person.occupation + "\n";
   // TODO: finish getting the rest of the information to display
   alert(personInfo);
 }

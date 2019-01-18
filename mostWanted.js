@@ -20,30 +20,73 @@ function app(people){
     break;
   }
 }
+//finds person by there full name
 function searchByName(people){
 
   var firstName = promptFor("What is the person's first name?", chars);
   var lastName = promptFor("What is the person's last name?", chars);
-  let filteredPeople = people.filter(function(el) {
+  let filteredPeople = people.filter(function(el){
     if(el.firstName.toLowerCase() === firstName && el.lastName.toLowerCase() === lastName) {
-      return el;
+      return true;
     }
   });
     return filteredPeople;
   // 
 
 }
+//finds any children of person
+function checkForKids(person, people){
+  let kidsFound = people.filter(function(el){
+    for(var i = 0; i < el.parents.length; ++i){
+      if(el.parents[i] === person.id){
+       return true;
+      }
+    }
+  });
+  return kidsFound;
+}
+//finds trait inputed then searches for each person with that trait
 function checkTraits(people){
-  var traitKnows = prompt("Enter trait you know of this person(id , firstName, ")
+  var traitKnows = prompt("Enter trait you know of this person (Options: firstName, lastName, gender, dob, height, weight, eyeColor, occupation, or parents)");
   var traitInformationEntered = prompt ("Please enter this person's " + traitKnows + ".");
   let filterTraits = people.filter(function(el){
     if(el[traitKnows].toLowerCase() === traitInformationEntered.toLowerCase()){
 
-      return el;
-}
-   
-});
+      return true;
+    }
+  });
    return filterTraits;
+}
+function checkForParents(person, people){
+  let parentsFound = people.filter(function(el){
+    for(var i = 0; i < el.parents.length; ++i){
+      if(el.id === person.parents[i]){
+       return true;
+      }
+    }
+  });
+  return parentsFound;
+}
+function checkForGrandkids(person, people){
+  let parentsFound = people.filter(function(el){
+    for(var i = 0; i < el.parents.length; ++i){
+      if(el.id === person.parents[i]){
+       return true;
+      }
+    }
+  });
+  return parentsFound;
+}
+function checkForDescendant(person, people){
+  let descendantFound = people.filter(function(el){
+    for(var i = 0; i < el.parents.length; ++i){
+      if(el.parents[i] === person.id){
+      return true;
+      checkForDescendant(descendantFound, people);
+      }
+    }
+  });
+  return descendantFound;
 }
 // Menu function to call once you find who you are looking for
 function mainMenu(person, people){
@@ -54,18 +97,21 @@ function mainMenu(person, people){
     alert("Could not find that individual.");
     return app(people); // restart
   }
-
   var displayOption = prompt("Found " + person.firstName + " " + person.lastName + " . Do you want to know their 'info', 'family', or 'descendants'? Type the option you want or 'restart' or 'quit'");
-
+  let foundKids;
   switch(displayOption){
     case "info":
       displayPerson(person);
       break;
     case "family":
-      // TODO: get person's family
+      foundKids = checkForKids(person, people);//finds if person has kids
+      let foundParents = checkForParents(person, people);//finds if person has parents
+      displayPeople(foundKids, foundParents);
       break;
     case "descendants":
-      // TODO: get person's descendants
+      let foundDescendant = checkForDescendant(person, people);
+      displayPeople(foundDescendant);
+      //get person's descendants
       break;
     case "restart":
       app(people); // restart
@@ -82,8 +128,8 @@ function mainMenu(person, people){
 
 // alerts a list of people
 function displayPeople(people){
-  alert(people.map(function(person){
-    return person.firstName + " " + person.lastName;
+  alert(people.map(function(people){
+    return people.firstName + " " + people.lastName;
   }).join("\n"));
 }
 
@@ -92,8 +138,14 @@ function displayPerson(person){
   // height, weight, age, name, occupation, eye color.
   var personInfo = "First Name: " + person.firstName + "\n";
   personInfo += "Last Name: " + person.lastName + "\n";
+  personInfo += "Age: " + person.age + "\n";
+  personInfo += "Height: " + person.height + "\n";
+  personInfo += "Weight: " + person.weight + "\n";
+  personInfo += "Eye Color: " + person.eyecolor + "\n";
+  personInfo += "occupation: " + person.occupation + "\n";
   // TODO: finish getting the rest of the information to display
   alert(personInfo);
+  return;
 }
 
 // function that prompts and validates user input

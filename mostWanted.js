@@ -134,18 +134,53 @@ function displayPeople(people){
 }
 
 function displayPerson(person){
+}
   // print all of the information about a person:
   // height, weight, age, name, occupation, eye color.
+  // dob =01/18/2019 = 0/1/2
+
+function calcAge(people){
+ let date = new Date();
+ let month = date.getMonth() + 1;
+ let day = date.getDate();
+ let year = date.getFullYear();
+ people.map(function(el){
+   let dobSplit = el.dob.split("/");
+   let age = year - dobSplit[2];
+   if(dobSplit[0] < month){
+     age--;
+     el.age = age;
+     console.log(age);
+   }
+   else if(dobSplit[0] == month && dobSplit[1] < day)
+   {
+     age--;
+     el.age = age;
+     console.log(age);
+   }
+   else
+   {
+     el.age = age;
+     console.log(age);
+   }
+ });
+
+}
+
   var personInfo = "First Name: " + person.firstName + "\n";
-  personInfo += "Last Name: " + person.lastName + "\n";
-  personInfo += "Age: " + person.age + "\n";
-  personInfo += "Height: " + person.height + "\n";
-  personInfo += "Weight: " + person.weight + "\n";
-  personInfo += "Eye Color: " + person.eyecolor + "\n";
-  personInfo += "occupation: " + person.occupation + "\n";
+
+  personInfo += promptFor("Last Name: " + person.lastName + "\n");
+  personInfo += promptFor("Age: " + person.age + "\n");
+  personInfo += promptFor("Height: " + person.height + "\n");
+  personInfo += promptFor("Weight: " + person.weight + "\n");
+  personInfo += promptFor("Eye Color: " + person.eyecolor + "\n");
+  personInfo += promptFor("occupation: " + person.occupation + "\n");
+
   // TODO: finish getting the rest of the information to display
+  
   alert(personInfo);
-  return;
+
+  return age 
 }
 
 // function that prompts and validates user input

@@ -1,7 +1,7 @@
 /*
 Build all of your functions for displaying and gathering information below (GUI).
 */
-
+console.log(calcAge(data));
 function app(people){
   var searchType = promptFor("Do you know the name of the person you are looking for? Enter 'yes' or 'no'", yesNo).toLowerCase();
   switch(searchType){
@@ -48,11 +48,13 @@ function checkTraits(people){
 // Menu function to call once you find who you are looking for
 function mainMenu(person, people){
 
+  
   /* Here we pass in the entire person object that we found in our search, as well as the entire original dataset of people. We need people in order to find descendants and other information that the user may want. */
 
   if(!person){
     alert("Could not find that individual.");
     return app(people); // restart
+        }
   }
 
   var displayOption = prompt("Found " + person.firstName + " " + person.lastName + " . Do you want to know their 'info', 'family', or 'descendants'? Type the option you want or 'restart' or 'quit'");
@@ -71,8 +73,9 @@ function mainMenu(person, people){
       app(people); // restart
       break;
     case "quit":
-      return; // stop execution
     default:
+          return; stop execution
+
       return mainMenu(person, people); // ask again
   }
 
@@ -87,11 +90,24 @@ function displayPeople(people){
   }).join("\n"));
 }
 
-function displayPerson(person){
-}
   // print all of the information about a person:
   // height, weight, age, name, occupation, eye color.
   // dob =01/18/2019 = 0/1/2
+
+function displayPerson(person){
+	 var personInfo = "First Name: " + person.firstName + "\n";
+  personInfo += "Last Name: " + person.lastName + "\n";
+  personInfo += "Age: " + calcAge(person) + "\n";
+  personInfo += "Height: " + person.height + "\n";
+  personInfo += "Weight: " + person.weight + "\n";
+  personInfo += "Eye Color: " + person.eyecolor + "\n";
+  personInfo += "occupation: " + person.occupation + "\n";
+
+  // TODO: finish getting the rest of the information to display
+  
+  alert(personInfo);
+  
+}
 
 function calcAge(people){
  let date = new Date();
@@ -117,23 +133,11 @@ function calcAge(people){
      el.age = age;
      console.log(age);
    }
+   return age
  });
 
 }
 
-
-  var personInfo = "First Name: " + person.firstName + "\n";
-  personInfo += promptFor("Last Name: " + person.lastName + "\n");
-  personInfo += promptFor("Age: " + person.age + "\n");
-  personInfo += promptFor("Height: " + person.height + "\n");
-  personInfo += promptFor("Weight: " + person.weight + "\n");
-  personInfo += promptFor("Eye Color: " + person.eyecolor + "\n");
-  personInfo += promptFor("occupation: " + person.occupation + "\n");
-  // TODO: finish getting the rest of the information to display
-  
-  alert(personInfo);
-  return age 
-}
 
 // function that prompts and validates user input
 function promptFor(question, callback){

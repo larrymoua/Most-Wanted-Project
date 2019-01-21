@@ -3,6 +3,7 @@ Build all of your functions for displaying and gathering information below (GUI)
 */
 console.log(calcAge(data));
 function app(people){
+
   var searchType = promptFor("Do you know the name of the person you are looking for? Enter 'yes' or 'no'", yesNo).toLowerCase();
   switch(searchType){
     case 'yes':
@@ -20,6 +21,8 @@ function app(people){
     break;
   }
 }
+
+
 function searchByName(people){
 
   var firstName = promptFor("What is the person's first name?", chars);
@@ -33,6 +36,7 @@ function searchByName(people){
   // 
 
 }
+
 function checkTraits(people){
   var traitKnows = prompt("Enter trait you know of this person(id , firstName, ")
   var traitInformationEntered = prompt ("Please enter this person's " + traitKnows + ".");
@@ -74,7 +78,6 @@ function mainMenu(person, people){
       break;
     case "quit":
     default:
-          return; stop execution
 
       return mainMenu(person, people); // ask again
   }
@@ -114,7 +117,7 @@ function calcAge(people){
  let month = date.getMonth() + 1;
  let day = date.getDate();
  let year = date.getFullYear();
- people.map(function(el){
+ let x = people.map(function(el){
    let dobSplit = el.dob.split("/");
    let age = year - dobSplit[2];
    if(dobSplit[0] < month){
@@ -133,7 +136,7 @@ function calcAge(people){
      el.age = age;
      console.log(age);
    }
-   return age
+   return el;
  });
 
 }

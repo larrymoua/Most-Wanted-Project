@@ -37,6 +37,17 @@ function searchByName(people){
 
 }
 //finds any children of person
+function checkForSpouse(person, people){
+    let spouseFound = people.filter(function(el){
+    for(var i = 0; i < el.currentSpouse.length; ++i){
+      if(el.currentSpouse[i] === person.id){
+       return true;
+      }
+    }
+  });
+  return kidsFound;
+}
+//finds children
 function checkForKids(person, people){
   let kidsFound = people.filter(function(el){
     for(var i = 0; i < el.parents.length; ++i){
@@ -47,7 +58,16 @@ function checkForKids(person, people){
   });
   return kidsFound;
 }
-//finds trait inputed then searches for each person with that trait
+function checkForDescendant(person, people, arrayPassed){
+    for(var i = 0; i < person.length; ++i){
+      if (people.parents == person.id || person.parents == people.id){
+
+        arrayPassed.push(person);
+        checkForDescendant(person, people, arrayPassed); 
+      }
+    } 
+     return;
+}//finds trait inputed then searches for each person with that trait
 function checkTraits(people){
   var traitKnows = prompt("Enter trait you know of this person (Options: firstName, lastName, gender, dob, height, weight, eyeColor, occupation, or parents)");
   var traitInformationEntered = prompt ("Please enter this person's " + traitKnows + ".");
@@ -74,20 +94,6 @@ function checkForParents(person, people){
   });
   return parentsFound;
 }
-function checkForDescendant(person, people){
-  var descendantFound = people.filter(function(el){
-    for(let i = 0; i < el.parents.length; ++i){
-    if(el.parents[i] === person.id){
-      return true;
-      }
-    }
-    });
-  for(let i = 0; i < checkForDescendant.length; ++i){
-      var x = descendantFound.concat(checkForDescendant(descendantFound[i], people, counter));
-      return x
-  }
-  return descendantFound;
-}
 // Menu function to call once you find who you are looking for
 function mainMenu(person, people){
 
@@ -97,6 +103,7 @@ function mainMenu(person, people){
     alert("Could not find that individual.");
     return app(people); // restart
   }
+  var arrayTwo=[];
   var displayOption = prompt("Found " + person.firstName + " " + person.lastName + " . Do you want to know their 'info', 'family', or 'descendants'? Type the option you want or 'restart' or 'quit'");
   let foundKids;
   switch(displayOption){
@@ -106,11 +113,12 @@ function mainMenu(person, people){
     case "family":
       foundKids = checkForKids(person, people);//finds if person has kids
       let foundParents = checkForParents(person, people);//finds if person has parents
-      displayPeople(foundKids, foundParents);
+      let spouseFound = checkForSpouse(person, people);
+      displayPeople(foundKids, foundParents, checkForSpouse);
       break;
     case "descendants":
-      let foundDescendant = checkForDescendant(person, people);
-      displayPeople(foundDescendant);
+      checkForDescendant(person, people, arrayTwo);
+      displayPeople(arrayTwo);
       //get person's descendants
       break;
     case "restart":
@@ -193,3 +201,4 @@ function yesNo(input){
 // helper function to pass in as default promptFor validation
 function chars(input){
   return true; // default validation only
+}

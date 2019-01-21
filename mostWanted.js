@@ -11,7 +11,8 @@ function app(people){
       break;
     case 'no':
       let filterTraits = checkTraits(people);
-      mainMenu(filterTraits[0],people);
+      moreThanOneTrait(filterTraits);
+      app(people);
      // search by traits
       break;
     default:
@@ -19,6 +20,7 @@ function app(people){
       app(people); // restart app
     break;
   }
+  app(people);
 }
 //finds person by there full name
 function searchByName(people){
@@ -50,11 +52,16 @@ function checkTraits(people){
   var traitKnows = prompt("Enter trait you know of this person (Options: firstName, lastName, gender, dob, height, weight, eyeColor, occupation, or parents)");
   var traitInformationEntered = prompt ("Please enter this person's " + traitKnows + ".");
   let filterTraits = people.filter(function(el){
+
     if(el[traitKnows].toLowerCase() === traitInformationEntered.toLowerCase()){
 
       return true;
     }
   });
+    if(filterTraits.length > 1){
+      moreThanOneTrait(filterTraits);
+    }
+
    return filterTraits;
 }
 function checkForParents(person, people){
@@ -67,25 +74,17 @@ function checkForParents(person, people){
   });
   return parentsFound;
 }
-function checkForGrandkids(person, people){
-  let parentsFound = people.filter(function(el){
-    for(var i = 0; i < el.parents.length; ++i){
-      if(el.id === person.parents[i]){
-       return true;
-      }
-    }
-  });
-  return parentsFound;
-}
-function checkForDescendant(person, people){
+function checkForDescendant(person, people, counter){
   let descendantFound = people.filter(function(el){
     for(var i = 0; i < el.parents.length; ++i){
-      if(el.parents[i] === person.id){
+    if(el.parents[i] === person.id){
       return true;
-      checkForDescendant(descendantFound, people);
       }
     }
-  });
+    });
+    if(counter > 0){
+      let x = checkForDescendant(descendantFound, people, counter-1);
+    }
   return descendantFound;
 }
 // Menu function to call once you find who you are looking for
@@ -109,7 +108,7 @@ function mainMenu(person, people){
       displayPeople(foundKids, foundParents);
       break;
     case "descendants":
-      let foundDescendant = checkForDescendant(person, people);
+      let foundDescendant = checkForDescendant(person, people, 2);
       displayPeople(foundDescendant);
       //get person's descendants
       break;
@@ -125,63 +124,57 @@ function mainMenu(person, people){
   return mainMenu(person, people);//ask again after breaks
 
 }
-
+function moreThanOneTrait(peopleListed){
+    alert("Here are all the people with the same trait." + "\n" + peopleListed.map(function(peopleListed){
+    return peopleListed.firstName + " " + peopleListed.lastName;
+    }).join("\n"));
+}
 // alerts a list of people
 function displayPeople(people){
   alert(people.map(function(people){
     return people.firstName + " " + people.lastName;
   }).join("\n"));
 }
-
 function displayPerson(person){
-}
   // print all of the information about a person:
   // height, weight, age, name, occupation, eye color.
-  // dob =01/18/2019 = 0/1/2
-
-function calcAge(people){
- let date = new Date();
- let month = date.getMonth() + 1;
- let day = date.getDate();
- let year = date.getFullYear();
- people.map(function(el){
-   let dobSplit = el.dob.split("/");
-   let age = year - dobSplit[2];
-   if(dobSplit[0] < month){
-     age--;
-     el.age = age;
-     console.log(age);
-   }
-   else if(dobSplit[0] == month && dobSplit[1] < day)
-   {
-     age--;
-     el.age = age;
-     console.log(age);
-   }
-   else
-   {
-     el.age = age;
-     console.log(age);
-   }
- });
-
-}
-
   var personInfo = "First Name: " + person.firstName + "\n";
-
-  personInfo += promptFor("Last Name: " + person.lastName + "\n");
-  personInfo += promptFor("Age: " + person.age + "\n");
-  personInfo += promptFor("Height: " + person.height + "\n");
-  personInfo += promptFor("Weight: " + person.weight + "\n");
-  personInfo += promptFor("Eye Color: " + person.eyecolor + "\n");
-  personInfo += promptFor("occupation: " + person.occupation + "\n");
-
-  // TODO: finish getting the rest of the information to display
-  
+  personInfo += "Last Name: " + person.lastName + "\n";
+  personInfo += "Age: " + person.age + "\n";
+  personInfo += "Height: " + person.height + "\n";
+  personInfo += "Weight: " + person.weight + "\n";
+  personInfo += "Eye Color: " + person.eyecolor + "\n";
+  personInfo += "occupation: " + person.occupation + "\n";
   alert(personInfo);
-
-  return age 
+  return;
 }
+// function calcAge(people){
+//  let date = new Date();
+//  let month = date.getMonth() + 1;
+//  let day = date.getDate();
+//  let year = date.getFullYear();
+//  people.map(function(el){
+//    let dobSplit = el.dob.split("/");
+//    let age = year - dobSplit[2];
+//    if(dobSplit[0] < month){
+//      age--;
+//      el.age = age;
+//      console.log(age);
+//    }
+//    else if(dobSplit[0] == month && dobSplit[1] < day)
+//    {
+//      age--;
+//      el.age = age;
+//      console.log(age);
+//    }
+//    else
+//    {
+//      el.age = age;
+//      console.log(age);
+//    }
+//  });
+
+// }
 
 // function that prompts and validates user input
 function promptFor(question, callback){

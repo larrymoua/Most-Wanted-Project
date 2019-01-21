@@ -2,8 +2,9 @@
 Build all of your functions for displaying and gathering information below (GUI).
 */
 
-function app(people){
-  var searchType = promptFor("Do you know the name of the person you are looking for? Enter 'yes' or 'no'", yesNo).toLowerCase();
+
+function app(people){  
+	var searchType = promptFor("Do you know the name of the person you are looking for? Enter 'yes' or 'no'", yesNo).toLowerCase();
   switch(searchType){
     case 'yes':
       let filteredPeople = searchByName(people);// search by name
@@ -13,29 +14,32 @@ function app(people){
       let filterTraits = checkTraits(people);
       moreThanOneTrait(filterTraits);
       app(people);
+
      // search by traits
       break;
     default:
       alert("Invalid input. Please try again!");
       app(people); // restart app
     break;
-  }
+}
   app(people);
 }
 //finds person by there full name
+
 function searchByName(people){
 
   var firstName = promptFor("What is the person's first name?", chars);
   var lastName = promptFor("What is the person's last name?", chars);
+
   let filteredPeople = people.filter(function(el){
     if(el.firstName.toLowerCase() === firstName && el.lastName.toLowerCase() === lastName) {
-      return true;
-    }
+      return true;    }
   });
     return filteredPeople;
   // 
 
 }
+
 //finds any children of person
 function checkForSpouse(person, people){
     let spouseFound = people.filter(function(el){
@@ -96,7 +100,6 @@ function checkForParents(person, people){
 }
 // Menu function to call once you find who you are looking for
 function mainMenu(person, people){
-
   /* Here we pass in the entire person object that we found in our search, as well as the entire original dataset of people. We need people in order to find descendants and other information that the user may want. */
 
   if(!person){
@@ -125,7 +128,6 @@ function mainMenu(person, people){
       app(people); // restart
       break;
     case "quit":
-      return; // stop execution
     default:
       return mainMenu(person, people); // ask again
   }
@@ -154,36 +156,34 @@ function displayPerson(person){
   personInfo += "Weight: " + person.weight + "\n";
   personInfo += "Eye Color: " + person.eyecolor + "\n";
   personInfo += "occupation: " + person.occupation + "\n";
-  alert(personInfo);
-  return;
-}
-// function calcAge(people){
-//  let date = new Date();
-//  let month = date.getMonth() + 1;
-//  let day = date.getDate();
-//  let year = date.getFullYear();
-//  people.map(function(el){
-//    let dobSplit = el.dob.split("/");
-//    let age = year - dobSplit[2];
-//    if(dobSplit[0] < month){
-//      age--;
-//      el.age = age;
-//      console.log(age);
-//    }
-//    else if(dobSplit[0] == month && dobSplit[1] < day)
-//    {
-//      age--;
-//      el.age = age;
-//      console.log(age);
-//    }
-//    else
-//    {
-//      el.age = age;
-//      console.log(age);
-//    }
-//  });
 
-// }
+function calcAge(people){
+ let date = new Date();
+ let month = date.getMonth() + 1;
+ let day = date.getDate();
+ let year = date.getFullYear();
+ people.map(function(el){
+   let dobSplit = el.dob.split("/");
+   let age = year - dobSplit[2];
+   if(dobSplit[0] < month){
+     age--;
+     el.age = age;
+     console.log(age);
+   }
+   else if(dobSplit[0] == month && dobSplit[1] < day)
+   {
+     age--;
+     el.age = age;
+     console.log(age);
+   }
+   else
+   {
+     el.age = age;
+     console.log(age);
+   }
+ });
+
+}
 
 // function that prompts and validates user input
 function promptFor(question, callback){

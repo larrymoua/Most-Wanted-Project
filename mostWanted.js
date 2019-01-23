@@ -11,8 +11,7 @@ function app(people){
        mainMenu(filteredPeople[0], people);
       break;
     case 'no':
-      let filterTraits = checkTraits(people);
-      moreThanOneTrait(filterTraits);
+      twoToFive(people);
       app(people);
      // search by traits
       break;
@@ -39,7 +38,7 @@ function checkForKids(person, people){
   let kidsFound = people.filter(function(el){
     for(var i = 0; i < el.parents.length; ++i){
       if(el.parents[i] === person.id){
-       return true;
+        return true;
       }
     }
   });
@@ -70,18 +69,33 @@ function checkForDescendant(person, people, array, index){
     }
   return array
 }
-
-function checkTraits(people){
-  var traitKnows = prompt("Enter criteria you know of this person (Options: firstName, lastName, gender, weight, eyeColor, or occupation)");
-  var traitInformationEntered = prompt ("Please enter this person's " + traitKnows + ".");
+function twoToFive(people){
+  var traitEntered = prompt("Enter criteria you know of this person (Options: firstName, lastName, gender, weight, eyeColor, or occupation)");
+  var traitSearchFor = prompt("Please enter this person's " + traitEntered + ".");
+  var filterPeopleWithFirstTraits = checkTraits(people, traitEntered, traitSearchFor);
+  moreThanOneTrait(filterPeopleWithFirstTraits);
+  for(let i = 0 ; i < 6; i++){
+    var moreRefined = prompt("Did you want to refine the search with an another criteria? (y/n) ").toLowerCase();
+    if (moreRefined == "y"){
+    var additionalCriteria = prompt("Please enter the criteria here (Options: firstName, lastName, gender, weight, eyeColor, or occupation) : ");
+    var dataOfCriteria = prompt("Please enter the peron's " + additionalCriteria);
+    let updatedSearchWithAdditionalCriteria = checkTraits(filterPeopleWithFirstTraits, additionalCriteria, dataOfCriteria);
+    moreThanOneTrait (updatedSearchWithAdditionalCriteria);
+    twoToFive(updatedSearchWithAdditionalCriteria);
+    }
+    else
+    {
+      return;
+    }
+  }
+   return app(people);
+}
+function checkTraits(people, traitKnows, traitInformationEntered){
   let filterTraits = people.filter(function(el){
     if(el[traitKnows].toLowerCase() === traitInformationEntered.toLowerCase()){
       return true;
     }
   });
-    if(filterTraits.length > 1){
-      moreThanOneTrait(filterTraits);
-  }
    return filterTraits;
 }
 function checkForParents(person, people){
@@ -109,16 +123,22 @@ function mainMenu(person, people){
       displayPerson(person);
       break;
     case "family":
-     let foundKids = checkForKids(person, people);//finds if person has kids
-     let foundParents = checkForParents(person, people);//finds if person has parents
-    let foundSpouse = checkForSpouse(person, people);
-      displayPeople(foundKids, foundParents, foundSpouse);
+    let kidsFound = checkForKids(person, people);//finds if person has kids
+    var children = "Children";
+    displayFamily(kidsFound, children);
+    let parentsFound = checkForParents(person, people);//finds if person has parents
+    var parents = "Parents";
+    displayFamily(parentsFound, parents);
+    let spouseFound = checkForSpouse(person, people);//finds spouse
+    var spouse = "Spouse";
+    displayFamily(spouseFound, spouse);
       break;
     case "descendants":
       let arrayTwo = [];
       checkForDescendant(person, people, arrayTwo, 0);
       arrayTwo.pop();
-      displayPeople(arrayTwo);
+      var childrenNgrand = "Children and grandchildren";
+      displayFamily(arrayTwo, childrenNgrand);
       //get person's descendants
       break;
     case "restart":
@@ -133,13 +153,18 @@ function mainMenu(person, people){
   return mainMenu(person, people);//ask again after breaks
 }
 function moreThanOneTrait(peopleListed){
-    alert("Here are all the people with the same trait." + "\n" + peopleListed.map(function(peopleListed){
+    alert("Here are all the people with the criteria.." + "\n\n" + peopleListed.map(function(peopleListed){
     return peopleListed.firstName + " " + peopleListed.lastName;
     }).join("\n"));
 }
 // alerts a list of people
 function displayPeople(people){
   alert(people.map(function(people){
+    return people.firstName + " " + people.lastName;
+  }).join("\n"));
+}
+function displayFamily(people, whatFound){
+  alert(whatFound + " found : " + "\n\n" + people.map(function(people){
     return people.firstName + " " + people.lastName;
   }).join("\n"));
 }
